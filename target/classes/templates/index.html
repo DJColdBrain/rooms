@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+
+<form th:action="@{'/' + ${page}}" method="post" >
+    <ul>
+        <li><input th:field="${calendar.date}"  type="date" name="date" id="date"/>Select Date
+            <input type="hidden" th:id="${page}" th:field="${page}" th:value="${page}" th:name="${page}" />
+        </li>
+
+        <li><input th:field="${calendar.startTime}" type="time" th:value="${startDate}" name="startTime" id="startTime"/>Select Start Time</li>
+        <li><input th:field="${calendar.endTime}" type="time" th:value="${endTime}" name="endTime" id="endTime"/>Select Start Time</li>
+        <li>Select Chair Type
+            <input type="radio" th:each="type : ${chairs}" th:field="${chair.chairType}" th:value="${type.chairType}" th:text="${type.chairType}"/>
+        </li>
+        <li>Select Desk Type
+            <input type="radio" th:each="type : ${desks}" th:field="${desk.deskType}" th:value="${type.deskType}" th:text="${type.deskType}"/>
+        </li>
+        <li>Live Stream? <br/>
+            <input type="radio" th:field="${room.liveStream}" th:value="Yes" th:text="Yes" checked=""/><br/>
+            <input type="radio" th:field="${room.liveStream}" th:value="No" th:text="No"/>
+        </li>
+        <li>
+            <input type="submit"/>
+        </li>
+    </ul>
+
+</form>
+<div th:if="${err}">
+    <h1 th:text="${err}"></h1>
+</div>
+
+<div th:if="${!rooms.isEmpty()}">
+    <!--<label th:each="freeRoom : ${rooms}" th:text="${freeRoom.name} + ' - ' + ${freeRoom.price} + ' leva'">Heeeee</label>-->
+    <div>
+        <div>
+          <table>
+              <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="freeRoom : ${rooms}">
+                    <th th:text="${freeRoom.name}"></th>
+                    <th th:text="${freeRoom.price}"></th>
+                </tr>
+              </tbody>
+          </table>
+            <hr/>
+            <ul th:if="${page == 0}">
+                <li th:each="i : ${#numbers.sequence(0, page+1)}">
+                    <a  th:text="${i}" th:href="@{'/' + ${i}}"></a>
+                </li>
+            </ul>
+            <ul th:if="${page > 0}">
+                <li th:each="i : ${#numbers.sequence(page-1, page+1)}">
+                    <a th:text="${i}" th:href="@{'/' + ${i}}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
